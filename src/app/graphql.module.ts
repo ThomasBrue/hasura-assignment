@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import { take } from 'rxjs/operators';
 import { ApolloLink } from 'apollo-link';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const uri = 'http://localhost:8081/v1/graphql'; // <-- add the URL of the GraphQL server here
 export function createApollo(httpLink: HttpLink): any {
@@ -17,6 +18,8 @@ export function createApollo(httpLink: HttpLink): any {
 }
 
 @NgModule({
+  // imports: [FormsModule, ReactiveFormsModule],
+  // exports: [FormsModule, ReactiveFormsModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,
