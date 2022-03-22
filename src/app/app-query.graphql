@@ -1,0 +1,37 @@
+query Tasks {
+  tasks {
+    uuid
+    title
+    description
+    taskStatus {
+      id
+      name
+    }
+    user {
+      fullName
+      uuid
+    }
+  }
+}
+
+mutation AddTask($authorId: String!, $description: String!, $title: name!) {
+  insert_tasks(
+    objects: { authorId: $authorId, description: $description, title: $title }
+  ) {
+    returning {
+      description
+      title
+      user {
+        fullName
+        uuid
+      }
+      uuid
+    }
+  }
+}
+
+mutation CreateUser($uuid: String!, $fullName: name!) {
+  insert_users(objects: { fullName: $fullName, uuid: $uuid }) {
+    affected_rows
+  }
+}
