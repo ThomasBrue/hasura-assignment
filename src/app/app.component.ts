@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { Apollo, QueryRef } from 'apollo-angular';
-// import * as Apollo from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import {
@@ -11,7 +9,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
 
 interface Task {
   uuid: string;
@@ -26,22 +23,9 @@ interface Payment {
   status: boolean;
 }
 
-// interface Response {
-//   tasks: Task[];
-// }
-
 interface Response {
   payments: Payment[];
 }
-
-const GET_TASK = gql`
-  query MyQuery {
-    tasks {
-      uuid
-      title
-    }
-  }
-`;
 
 const GET_PAYMENT = gql`
   query MyQuery {
@@ -54,17 +38,6 @@ const GET_PAYMENT = gql`
   }
 `;
 
-const ADD_TASK = gql`
-  mutation AddTask($title: String!) {
-    insert_tasks(objects: { title: $title }) {
-      returning {
-        title
-        uuid
-      }
-    }
-  }
-`;
-
 const ADD_PAYMENT = gql`
   mutation insertPayment($name: String, $amount: Int) {
     insert_PaymentTable_one(object: { name: $name, amount: $amount }) {
@@ -72,6 +45,25 @@ const ADD_PAYMENT = gql`
     }
   }
 `;
+
+const SUBSCRIBE_PAYMENT = gql`
+  subscription get_payments {
+    PaymentTable {
+      name
+      amount
+    }
+  }
+`;
+
+interface User {
+  id: number;
+  user: {
+    name: string;
+  };
+}
+interface GetOnlineUsersSub {
+  online_users: User[];
+}
 
 @Component({
   selector: 'app-root',
@@ -86,20 +78,26 @@ export class AppComponent {
   form: FormGroup;
   queryRef: QueryRef<Response>;
 
+  loading = true;
   constructor(private apollo: Apollo, private fb: FormBuilder) {}
 
+  paymentsArray = [];
+
   ngOnInit() {
-    /*     this.form = this.fb.group({
-      title: new FormControl('', Validators.required),
-    });
-
-    this.queryRef = this.apollo.watchQuery<Response>({
-      query: GET_TASK,
-    });
-
-    this.tasks$ = this.queryRef.valueChanges.pipe(
-      map((result) => result.data.tasks)
-    ); */
+    this.apollo
+      .subscribe<Payment>({
+        query: SUBSCRIBE_PAYMENT,
+      })
+      .subscribe(
+        ({ data, errors }) => {
+          console.log('DATA::: ', data);
+          console.log('Error::: ', errors);
+          console.log('got data ', data);
+        },
+        (error) => {
+          console.log('there was an error sending the query', error);
+        }
+      );
 
     this.form = this.fb.group({
       name: new FormControl(),
@@ -112,10 +110,7 @@ export class AppComponent {
 
     this.payments$ = this.queryRef.valueChanges.pipe(
       map((result) => {
-        // console.log(result.data['PaymentTable']);
         return result.data['PaymentTable'];
-
-        // return result.data.payments
       })
     );
   }
@@ -131,16 +126,4 @@ export class AppComponent {
         console.log('AppComponent -> onAddPayment -> data', data);
       });
   }
-
-  /*   onAddTask() {
-    this.apollo
-      .mutate({
-        mutation: ADD_TASK,
-        variables: this.form.value,
-      })
-      .subscribe(({ data }) => {
-        this.queryRef.refetch();
-        console.log('AppComponent -> onAddTask -> data', data);
-      });
-  } */
 }

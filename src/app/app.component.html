@@ -1,25 +1,25 @@
-<div>Hasura TEST</div>
-
-<!-- <form [formGroup]="form">
-  <input formControlName="title" placeholder="Enter title" type="text" />
-  <button [disabled]="form.invalid" (click)="onAddTask()">Submit</button>
-</form>
-
-<hr />
-<ul>
-  <li *ngFor="let task of tasks$ | async">{{ task.title }}</li>
-</ul> -->
-
+<h1 style="padding: 3px">Hasura Banking</h1>
 <hr />
 
-<form [formGroup]="form">
-  <input formControlName="name" placeholder="Enter name" type="text" />
-  <input formControlName="amount" placeholder="Enter amount" type="number" />
+<form style="padding: 10px" [formGroup]="form">
+  <input
+    class="input-field"
+    formControlName="name"
+    placeholder="Enter name"
+    type="text"
+  />
+  <input
+    class="input-field"
+    formControlName="amount"
+    placeholder="Enter amount"
+    type="number"
+  />
   <button [disabled]="form.invalid" (click)="onAddPayment()">Submit</button>
 </form>
 
-<ul>
-  <li *ngFor="let payment of payments$ | async">
-    name : {{ payment.name }} ___ amount {{ payment.amount }}
-  </li>
-</ul>
+<div style="padding: 5px" *ngFor="let payment of payments$ | async">
+  <div style="border: 2px solid blue; padding: 3px">
+    <div>name: {{ payment.name }}</div>
+    <div>amount: {{ payment.amount }}</div>
+  </div>
+</div>
