@@ -1,29 +1,25 @@
-Do not forget to adjust you Firbase configuration according to yours.
+# Assignment Hasura / GraphQL
 
-# HasuraTutorial
+### Thomas Bründl
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
+# Introduction
 
-## Development server
+With this app a user can create new payments by entering a name and an amount. <br>
+(The uuid will be generated on the hasura service) <br>
+The payments are send to Hasura and stored in a payment table. <br>
+The payments are fetched form the payments server. <br>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+# How to run
 
-## Code scaffolding
+1. docker-compose up
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+<br> You have to create a "PaymentTable" in hasura with the following specifications:
 
-## Build
+`uuid - uuid, primary key, unique, default: gen_random_uuid()` <br>
+`name - text` <br>
+`amount - integer` <br>
+`status - boolean` <br>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+2. npm start
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Go to `http://localhost:4200/` to open the banking-interface.
